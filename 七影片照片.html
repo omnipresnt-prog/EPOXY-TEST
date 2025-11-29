@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七、影片與照片展示</title>
+    <style>
+        /* 根變數定義 (與主頁保持一致) */
+        :root {
+            --color-primary: #004c97;         
+            --color-accent: #007bff;          
+            --color-bg-body: #f8f9fa;         
+        }
+        /* 導航列樣式 (與其他頁面保持一致) */
+        body { margin: 0; font-family: "Microsoft JhengHei", "Segoe UI", Roboto, sans-serif; background-color: #f8f9fa; }
+        .nav-tabs { 
+            background: #004c97; /* 深藍背景 */
+            padding: 15px; 
+            text-align: center; 
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn { 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 50px; 
+            font-size: 0.9rem; 
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        /* 標示本頁為 active (白色高亮) */
+        .nav-btn.active { 
+            background: white; 
+            color: var(--color-primary); 
+            font-weight: bold; 
+            box-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        /* --- 內容區兩欄佈局 CSS (修正對齊) --- */
+.content-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    
+    /* 核心：兩欄網格佈局 */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 兩欄平均分配空間 */
+    gap: 30px; /* 欄與欄之間的間距 */
+    
+    /* 關鍵修正：確保項目以行 (row) 嚴格排列，不允許自動填補空隙 */
+    grid-auto-flow: row; 
+}
+
+/* 每個影片/圖片卡片樣式 */
+.media-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    text-align: center;
+    
+    /* 關鍵修正：強制卡片內部元素垂直對齊，且確保卡片盡可能等高 */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 讓它填滿整個網格單元的高度 */
+}
+
+/* 確保圖片/影片保持一致的視覺空間 */
+.media-item img, 
+.media-item video,
+.media-item iframe { 
+    width: 100%;
+    /* 限制媒體內容的最大高度，避免過長的內容撐開卡片 */
+    max-height: 350px; 
+    height: auto;
+    object-fit: contain; /* 確保內容不會被裁剪 */
+    border-radius: 6px;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* 媒體內容不被壓縮 */
+}
+
+.media-item h4 {
+    color: var(--color-primary);
+    margin: 5px 0 10px;
+    flex-shrink: 0; /* 標題不被壓縮 */
+}
+
+.media-item p {
+    /* 讓描述文字可以自動填滿剩餘空間，確保所有卡片底部對齊 */
+    flex-grow: 1; 
+    margin: 0;
+    padding-top: 5px; /* 與媒體內容區隔 */
+}
+
+/* RWD 響應式設計：小螢幕變為單欄 */
+@media (max-width: 950px) { 
+    .content-container {
+        grid-template-columns: 1fr; 
+    }
+}
+    </style>
+</head>
+<body>
+
+<div class="nav-tabs">
+    <a href="一互動式.html" class="nav-btn">一、互動式</a> 
+    <a href="二Epoxy灌漿施工指南.html" class="nav-btn">二、Epoxy灌漿指南</a>
+    <a href="三判斷Epoxy能力邊界.html" class="nav-btn">三、Epoxy能力邊界</a>
+    <a href="四遠離自然頻率.html" class="nav-btn">四、遠離自然頻率</a>
+    <a href="五Epoxy功效.html" class="nav-btn">五、Epoxy功效</a>
+    <a href="六TIM12月簡報.html" class="nav-btn">六、TIM12月</a>
+    <a href="七影片照片.html" class="nav-btn active">七、影片照片</a>
+    <a href="八心得.html" class="nav-btn">八、心得</a>
+</div>
+<div class="content-container">
+    
+    <div class="media-item">
+        <h4>影片一：各家ASTM C1339 灌漿流動性測試</h4>
+        <video controls style="width: 100%;">
+            <source src="0.0_ASTM C1339 flow test Distance Time Fill Time EBA .mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示 Epoxy 灌漿料的流動性，依 ASTM C1339 標準測試。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片二：開廣巧迈特灌漿流動性測試</h4>
+        <video controls style="width: 100%;">
+            <source src="0.0_測試流動率2020-11-11 15.22.54.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示 開廣巧迈特Epoxy 灌漿料的流動性測試。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片三：長坡道自重擠壓流動</h4>
+        <video controls style="width: 100%;">
+            <source src="0.1_長坡道讓時間排氣自身重力擠壓流動.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示長坡道讓時間排氣自身重力擠壓流動。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片四：長坡道自重擠壓流動</h4>
+        <video controls style="width: 100%;">
+            <source src="0.1_設計長坡道 2024-05-05 08.13.15.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示長坡道自身重力擠壓流動及混料攪拌。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片五：設計集料箱灌注</h4>
+        <video controls style="width: 100%;">
+            <source src="0.2_集料箱Winstone 2021-05-05 11.03.56.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示設計集料箱長坡道自重擠壓流動。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片六：混合攪拌狀況時態</h4>
+        <video controls style="width: 100%;">
+            <source src="1.0_混合攪拌狀況可灌漿材料表面型態.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>混合攪拌材料表面型態樣貌。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片七：灌漿流動觀察</h4>
+        <video controls style="width: 100%;">
+            <source src="1.1_灌漿流動觀察.mov" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示灌漿流動觀察。</p>
+    </div>
+    <div class="media-item">
+        <h4>圖片八：樹脂灌注內部靜置排氣狀況</h4>
+        <img src="1.2_樹脂灌注內部靜置排氣狀況 .JPG" alt="Epoxy 固化後成品">
+        <p>樹脂灌注內部靜置排氣狀況，避免灌注速度過快冒料。</p>
+    </div>
+    <div class="media-item">
+        <h4>影片九：排氣表面反應狀況</h4>
+        <video controls style="width: 100%;">
+            <source src="2.0_排氣表面反應狀況.mov" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示排氣表面反應狀況。</p>
+    </div>
+    <div class="media-item">
+        <h4>圖片十：全部區域灌注完成狀況</h4>
+        <img src="2.1_全部區域灌注完成狀況，排氣中.JPG" alt="Epoxy 固化後成品">
+        <p>全部區域灌注完成排氣中，一格一格慢慢灌注至7~8分滿。</p>
+    </div>
+    <div class="media-item">
+        <h4>圖片十一：灌注後一小時狀況</h4>
+        <img src="2.2_灌注完成後，一小時後排氣狀況.JPG" alt="Epoxy 固化後成品">
+        <p>灌注完成後，一小時後排氣狀況。</p>
+    </div>
+    <div class="media-item">
+        <h4>圖片十二：八分滿，檢視孔狀況</h4>
+        <img src="3_八分滿，檢視孔狀況.JPG" alt="Epoxy 固化後成品">
+        <p>從透氣孔檢視灌漿狀況。</p>
+    </div>   
+    <div class="media-item">
+        <h4>圖片十三：開放空間灌漿狀況</h4>
+        <img src="4_開放空間灌漿排氣不受限制狀況良好.JPG" alt="Epoxy 固化後成品">
+        <p>開放空間灌漿排氣不受限制狀況良好。</p>
+    </div> 
+    <div class="media-item">
+        <h4>語音十四：Epoxy NoteBooklm介紹</h4>
+        <video controls style="width: 100%;">
+            <source src="epoxy notebooklm語音說明.m4a" type="video/mp4">
+            您的瀏覽器不支援影片播放，請更新您的瀏覽器。
+        </video>
+        <p>展示Epoxy灌注NoteBooklm介紹。</p>
+    </div>
+</div>
+
+</body>
+</html>

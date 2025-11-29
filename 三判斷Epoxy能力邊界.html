@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三、判斷Epoxy能力邊界</title>
+    <style>
+        /* 導航列樣式 */
+        body { margin: 0; font-family: "Microsoft JhengHei", "Segoe UI", Roboto, sans-serif; background-color: #f8f9fa; }
+        .nav-tabs { 
+            background: #004c97; /* 深藍背景 */
+            padding: 15px; 
+            text-align: center; 
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn { 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 50px; 
+            font-size: 0.9rem; 
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        /* 標示本頁為 active (白色高亮) */
+        .nav-btn.active { 
+            background: white; 
+            color: #004c97; 
+            font-weight: bold; 
+            box-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        /* 確保 iframe 佔滿剩餘空間 */
+        .iframe-container { width: 100%; height: calc(100vh - 80px); /* 100vh 減去導航列高度 */ }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="nav-tabs">
+    <a href="一互動式.html" class="nav-btn">一、互動式</a> 
+    <a href="二Epoxy灌漿施工指南.html" class="nav-btn">二、Epoxy灌漿指南</a>
+    <a href="三判斷Epoxy能力邊界.html" class="nav-btn active">三、Epoxy能力邊界</a>
+    <a href="四遠離自然頻率.html" class="nav-btn">四、遠離自然頻率</a>
+    <a href="五Epoxy功效.html" class="nav-btn">五、Epoxy功效</a>
+    <a href="六TIM12月簡報.html" class="nav-btn">六、TIM12月</a>
+    <a href="七影片照片.html" class="nav-btn">七、影片照片</a>
+    <a href="八心得.html" class="nav-btn">八、心得</a>
+</div>
+
+<div class="iframe-container">
+    <iframe src="三判斷Epoxy能力邊界.pdf"></iframe>
+</div>
+
+</body>
+</html>
