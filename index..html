@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epoxy 灌漿工程實戰與物理互動培訓 (完整版)</title>
+   <style>
+    /* 導航列樣式 (確保導航列美觀和功能正常) */
+    body { margin: 0; font-family: "Microsoft JhengHei", "Segoe UI", Roboto, sans-serif; background-color: #f8f9fa; }
+    .nav-tabs { 
+        background: #004c97; /* 深藍背景 */
+        padding: 15px 5px; /* 稍微減少左右 padding */
+        text-align: center; 
+        display: flex;
+        /* 關鍵修改: 移除 flex-wrap: wrap; 以強制單排顯示 */
+        /* flex-wrap: wrap; */ 
+        justify-content: center;
+        gap: 5px; /* 稍微減少按鈕間距 */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow-x: auto; /* 確保在窄螢幕上可以橫向滾動查看所有按鈕 */
+    }
+    .nav-btn { 
+        color: white; 
+        text-decoration: none; 
+        padding: 10px 15px; /* 稍微減少按鈕 padding */
+        border: 1px solid rgba(255,255,255,0.3); 
+        border-radius: 50px; 
+        font-size: 0.9rem; 
+        font-weight: bold;
+        transition: all 0.3s;
+        /* 確保按鈕不會被壓縮得太小 */
+        flex-shrink: 0;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.2); }
+    
+    /* 標示本頁為 active */
+    .nav-btn.active { 
+        background: white; 
+        color: #004c97; 
+        font-weight: bold; 
+        box-shadow: 0 0 8px rgba(255,255,255,0.5);
+    }
+
+    /* 確保 iframe 佔滿剩餘空間 (其他樣式保持不變) */
+    .iframe-container { width: 100%; height: calc(100vh - 80px); /* 100vh 減去導航列高度 */ }
+    iframe { width: 100%; height: 100%; border: none; }
+</style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* 根變數定義：基於圖片提取的顏色 */
+        :root {
+            --color-primary: #004c97;         /* 主要文字/標題 (深藍，來自 image_1.png) */
+            --color-accent: #007bff;          /* 主色/亮點 (亮藍，來自 image_0.png) */
+            --color-epoxy-red: #e74c3c;       /* Epoxy 模擬色 (鮮紅，來自 image_0.png) */
+            --color-accent-yellow: #f1c40f;   /* 強調色/警告 (亮黃，來自 image_0.png) */
+            --color-accent-green: #28a745;    /* 強調色/成功 (深綠，來自 image_0.png) */
+            --color-bg-body: #f8f9fa;         /* 頁面背景 (淺灰藍) */
+            --color-text-body: #333;          /* 一般文字顏色 */
+            --color-card-bg: #ffffff;         /* 卡片背景 */
+            --color-success: var(--color-accent-green); /* 成功綠 */
+            --color-warning: var(--color-accent-yellow); /* 警告黃 */
+            --color-danger: var(--color-epoxy-red);    /* 危險紅 */
+            --color-code-bg: #ecf0f1;         /* 程式碼/資訊塊背景 */
+            --color-shadow-light: rgba(0,0,0,0.05);
+            --color-shadow-medium: rgba(0,0,0,0.1);
+            --color-header-bg: #dbe9f4;       /* 標題背景淺藍 (來自 image_1.png) */
+        }
+
+        /* 基礎排版 */
+        body {
+            font-family: "Microsoft JhengHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--color-bg-body);
+            color: var(--color-text-body);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* 頁面標頭 */
+        header {
+            text-align: center; margin-bottom: 30px; padding: 25px;
+            background: linear-gradient(135deg, var(--color-primary), #003366); /* 使用深藍漸層 */
+            color: white; border-radius: 8px; box-shadow: 0 4px 10px var(--color-shadow-medium);
+        }
+        header h1 { margin: 0; font-size: 1.8rem; }
+
+        /* 區塊標籤 (Tags) */
+        .section-tag {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;
+            text-transform: uppercase; box-shadow: 0 2px 4px var(--color-shadow-light);
+        }
+        .tag-field { background-color: #ffeaa7; color: #d35400; }
+        .tag-design { background-color: #81ecec; color: #006266; }
+        .tag-phy { background-color: var(--color-accent); color: white; }
+
+        /* 手風琴區塊 (Accordion) */
+        .accordion-item {
+            background: var(--color-card-bg); margin-bottom: 15px; border-radius: 8px;
+            box-shadow: 0 2px 5px var(--color-shadow-light); overflow: hidden;
+            border-left: 5px solid var(--color-accent); /* 左側強調色改為亮藍 */
+        }
+        .accordion-header {
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; background: #fff; transition: background 0.3s;
+        }
+        .accordion-header:hover { background-color: #f9f9f9; }
+        .accordion-title { font-weight: bold; font-size: 1.1rem; color: var(--color-primary); }
+        .icon { font-size: 1.2rem; transition: transform 0.3s; color: var(--color-accent); }
+        .accordion-item.active .icon { transform: rotate(180deg); }
+        .accordion-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+            background-color: #fafafa; padding: 0 20px;
+        }
+        .accordion-item.active .accordion-content { padding: 20px; border-top: 1px solid #eee; }
+
+        /* 互動區域 */
+        .interactive-area {
+            background-color: #fff; border: 1px solid #ddd;
+            padding: 20px; border-radius: 8px; margin-top: 20px;
+            text-align: center; box-shadow: 0 2px 8px var(--color-shadow-light);
+        }
+        /* 覆寫 .interactive-area .controls button 的樣式 */
+        .interactive-area .controls button {
+            background-color: #f0f0f0;
+            color: var(--color-primary);
+            box-shadow: none;
+            border: 1px solid #ccc;
+            padding: 8px 16px; margin: 5px; cursor: pointer; border-radius: 4px;
+            font-weight: bold; transition: background 0.2s, color 0.2s, box-shadow 0.2s; font-size: 0.9rem;
+        }
+        .interactive-area .controls button.active-tab { 
+            background-color: var(--color-accent); /* 選中狀態改為亮藍 */
+            color: white;
+            border-color: var(--color-accent);
+            box-shadow: 0 2px 4px rgba(0,123,255,0.4); 
+        }
+        .interactive-area .controls button:hover { background-color: #e2e6ea; }
+        
+        /* --- SOP 區域專用樣式 --- */
+        .accordion-content h4 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--color-primary);
+        }
+
+        .step-controls {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .step-controls button {
+            flex-grow: 1;
+            background-color: #f0f0f0;
+            color: var(--color-primary);
+            border: 1px solid #ccc;
+            padding: 12px 10px;
+            margin: 0;
+            cursor: pointer;
+            font-size: 1.0rem;
+            font-weight: normal;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+            border-radius: 0;
+        }
+
+        /* 步驟按鈕 - 選中狀態 (改為亮藍) */
+        .step-controls button.active {
+            background-color: var(--color-accent); /* 亮藍 */
+            color: white;
+            font-weight: bold;
+            border-color: var(--color-accent);
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.4);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .step-controls button:first-child { border-top-left-radius: 4px; }
+        .step-controls button:last-child { border-top-right-radius: 4px; }
+
+        /* 步驟內容區塊 (上方線條改為亮藍) */
+        .step-content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+            border-top: 5px solid var(--color-accent); /* 亮藍線 */
+            background-color: var(--color-card-bg);
+        }
+
+        .step-content .step-purpose {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--color-epoxy-red); /* 使用鮮紅 */
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .step-details {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .step-details li {
+            padding: 8px 0;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        /* 模擬圖片中的箭頭 (改為亮藍) */
+        .step-details li::before {
+            content: "▶";
+            color: var(--color-accent); /* 亮藍 */
+            font-size: 0.9em;
+            margin-right: 10px;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .instruction {
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        /* 準備清單 (Checklist) */
+        .checklist { list-style: none; padding: 0; text-align: left; }
+        .checklist li { 
+            background: white; padding: 10px; border: 1px solid #ddd; margin-bottom: 5px; border-radius: 4px;
+            display: flex; align-items: center; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .checklist li:hover { background-color: #f0f0f0; }
+        .checklist input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; accent-color: var(--color-success); }
+        .checklist-success { 
+            display: none; background: #d4edda; color: #155724; padding: 15px; 
+            font-weight: bold; margin-top: 10px; border-radius: 4px; border: 1px solid #c3e6cb;
+        }
+
+        /* --- 表面狀態模擬器樣式 (Surface State Simulator) --- */
+        .surface-viewer {
+            width: 100%; height: 200px; background: #ddd; 
+            margin: 15px auto; border-radius: 6px; border: 2px solid #999;
+            position: relative; overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+        .surface-viewer video { opacity: 0.95; }
+        
+        /* 狀態描述 (左側線條改為鮮紅) */
+        .state-description { 
+            text-align: left; background: #f8f9fa; padding: 15px; 
+            border-radius: 4px; margin-top: 10px; font-size: 0.9rem;
+            border-left: 3px solid var(--color-epoxy-red); /* 鮮紅 */
+        }
+        
+        /* --- 灌漿模擬器樣式 (Grouting Simulation) --- */
+        .grout-sim-container {
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #c0c0c0;
+        }
+
+        .legend-box {
+            position: absolute;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+        }
+        /* Inlet 使用深綠，Vent 使用亮黃 */
+        .legend-box.inlet { left: 5px; top: 40px; text-align: left; background-color: var(--color-accent-green); }
+        .legend-box.vent { right: 5px; top: 40px; text-align: right; background-color: var(--color-accent-yellow); color: #333; text-shadow: none; }
+
+        .layer-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.7); 
+            z-index: 5;
+        }
+        .layer-label.baseplate { top: 50px; color: #ffffff; }
+        .layer-label.concrete { top: 300px; color: #333; text-shadow: none; }
+        
+        /* --- 故障邊界表格 (Table Styles) --- */
+        .diag-table { 
+            width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95rem; 
+            background: white; border-radius: 6px; overflow: hidden; 
+            box-shadow: 0 2px 4px var(--color-shadow-light); 
+        }
+        .diag-table th, .diag-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        /* 表頭背景改為淺藍 */
+        .diag-table th { background-color: var(--color-header-bg); color: var(--color-primary); font-weight: bold; }
+        
+        .diag-table .row-ok { background-color: #f0fff4; }
+        .diag-table .row-ng { background-color: #fff0f0; }
+
+        .diag-table .icon-ok { color: var(--color-success); font-size: 1.2em; font-weight: bold; }
+        .diag-table .icon-ng { color: var(--color-danger); font-size: 1.2em; font-weight: bold; }
+
+        /* --- K&M 彈簧系統樣式 --- */
+        .spring-system { 
+            height: 120px; position: relative; width: 100px; margin: 20px auto; 
+            border-top: 4px solid #333; 
+        }
+        .spring { 
+            width: 20px; margin: 0 auto; border: 1px solid #666; border-width: 0 2px; 
+            background: repeating-linear-gradient(45deg, transparent, transparent 5px, #ccc 5px, #ccc 8px); 
+            animation: spring-bounce 1s infinite ease-in-out; 
+            position: absolute; left: 40px; 
+        }
+        /* 質量塊改為鮮紅 */
+        .mass-block { 
+            width: 60px; height: 40px; background: var(--color-epoxy-red); color: white; 
+            position: absolute; left: 20px; display: flex; align-items: center; 
+            justify-content: center; animation: mass-bounce 1s infinite ease-in-out; 
+            border-radius: 4px; font-weight: bold; border: 2px solid #c0392b; 
+        }
+        @keyframes spring-bounce { 0% { height: 30px; } 50% { height: 70px; } 100% { height: 30px; } }
+        @keyframes mass-bounce { 0% { top: 30px; } 50% { top: 70px; } 100% { top: 30px; } }
+
+        /* 公式細節展開 (Formula Dive) */
+        details.formula-dive { 
+            background-color: var(--color-code-bg); border: 1px dashed #aaa; 
+            border-radius: 6px; margin: 15px 0; padding: 10px; 
+        }
+        details.formula-dive summary { 
+            cursor: pointer; color: var(--color-accent); font-weight: bold; 
+            outline: none; transition: color 0.2s; 
+        }
+        details.formula-dive summary:hover { color: #0056b3; }
+        
+        /* --- 振動模擬器樣式 (Vibration Simulator) --- */
+        .vib-sim-module { padding: 0; }
+        .vib-sim-module h2 { color: var(--color-primary); }
+        .vib-sim-module .scenarios { text-align: center; margin-bottom: 20px; }
+        .vib-sim-module .btn { 
+            padding: 10px 20px; margin: 0 10px; border: none; border-radius: 5px; 
+            cursor: pointer; font-weight: bold; transition: 0.3s; color: white; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* 按鈕顏色調整 */
+        .vib-sim-module .btn-epoxy { background-color: var(--color-accent); } /* 亮藍 */
+        .vib-sim-module .btn-iso { background-color: var(--color-accent-green); } /* 深綠 */
+        .vib-sim-module .btn-danger { background-color: var(--color-danger); } /* 鮮紅 */
+        .vib-sim-module .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .vib-sim-module .controls-grid { 
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; 
+            background: #eef2f3; padding: 20px; border-radius: 8px; margin-bottom: 20px; 
+        }
+        .vib-sim-module .control-group { 
+            display: flex; flex-direction: column; 
+            text-align: left;
+        }
+        .vib-sim-module input[type="range"] { 
+            width: 100%; margin-bottom: 5px; 
+            accent-color: var(--color-accent);
+        }
+        .vib-sim-module .value-display { 
+            font-size: 1.2em; color: var(--color-accent); font-weight: bold; 
+        }
+
+        .vib-sim-module .dashboard { 
+            display: flex; justify-content: space-around; margin-bottom: 20px; 
+            padding: 15px; background: #f8f9fa; 
+            border-left: 5px solid var(--color-accent); /* 亮藍 */
+            border-radius: 4px;
+        }
+        .vib-sim-module .stat-box { text-align: center; }
+        .vib-sim-module .stat-title { font-size: 0.9em; color: #666; }
+        .vib-sim-module .stat-value { font-size: 1.5em; font-weight: bold; }
+
+        .vib-sim-module .chart-container { 
+            position: relative; height: 350px; width: 100%; margin-top: 10px;
+        }
+        
+        .vib-sim-module #statusMessage { 
+            padding: 15px; text-align: center; font-weight: bold; 
+            border-radius: 5px; margin-top: 10px; 
+        }
+        .vib-sim-module .status-safe { 
+            background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; 
+        }
+        .vib-sim-module .status-danger { 
+            background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; 
+        }
+        .vib-sim-module .status-iso { 
+            background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; 
+        }
+        .vib-sim-module .formula { 
+            text-align: center; color: #555; font-style: italic; margin-top: 5px; 
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1>Epoxy 灌漿工程實戰指導</h1>
+        <p> 施工技巧+Epoxy表面觀察+延伸到設計思維阻尼振動分析</p>
+        
+        <div class="nav-tabs">
+            <a href="#" class="nav-btn active">一、互動式</a>
+            
+            <a href="二Epoxy灌漿施工指南.html" class="nav-btn">二、Epoxy灌漿指南</a>
+            <a href="三判斷Epoxy能力邊界.html" class="nav-btn">三、Epoxy能力邊界</a>
+            <a href="四遠離自然頻率.html" class="nav-btn">四、遠離自然頻率</a>
+            <a href="五Epoxy功效.html" class="nav-btn">五、Epoxy功效</a>
+            <a href="六TIM12月簡報.html" class="nav-btn">六、TIM12月</a>
+            <a href="七影片照片.html" class="nav-btn">七、影片照片</a>
+            <a href="八心得.html" class="nav-btn">八、心得</a>
+        </div>
+    </header>
+    
+    <div class="section-tag tag-field" style="background-color: #fff3cd; color: #856404;">優先級：高 (施工流程)</div>
+    <div class="accordion-item active">
+        <div class="accordion-header">
+            <div class="accordion-title">零、施工步驟詳解 (點擊步驟查看目的與細節)</div>
+            <div class="icon">▼</div>
+        </div>
+        <div class="accordion-content">
+            <div class="interactive-area" style="text-align:left;">
+                <p class="instruction">點擊下方按鈕切換步驟</p>
+                <div class="step-controls">
+    <button onclick="renderStep('1')" data-step="1" class="active">1. 基座準備</button>
+    <button onclick="renderStep('2')" data-step="2">2. 漿料拌合</button>
+    <button onclick="renderStep('3')" data-step="3">3. 灌注作業</button>
+    <button onclick="renderStep('4')" data-step="4">4. 養護處理</button>
+</div>
+<div id="step-content" class="step-content">
+    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-tag tag-field" style="background-color: #fff3cd; color: #856404;">優先級：高 (現場準備與實戰)</div>
+    <div class="accordion-item active">
+        <div class="accordion-header">
+            <div class="accordion-title">一、核心工藝:準備細節與密閉空間排氣</div>
+            <div class="icon">▼</div>
+        </div>
+        <div class="accordion-content">
+            <div class="interactive-area" style="text-align:left; background-color: #fffbf0; border-color: #ffeeba;">
+                <h3 style="margin-top:0; border-bottom:none; color:#856404;">📋 1.1施工前關鍵檢查表</h3>
+                <ul class="checklist" id="prep-checklist">
+                    <li><label><input type="checkbox" onclick="checkChecklist()"> <strong>通氣孔 (Vents)：</strong> 直徑至少 12mm，設置於角落及加強筋兩側。</label></li>
+                    <li><label><input type="checkbox" onclick="checkChecklist()"> <strong>溫度條件：</strong> 混凝土與設備維持在 $18^\circ$–$30^\circ\text{C}$，避免陽光直射。</label></li>
+                    <li><label><input type="checkbox" onclick="checkChecklist()"> <strong>集料箱 (Head Box)：</strong> 坡度約 $45^\circ$，利用重力擠壓。</label></li>
+                    <li><label><input type="checkbox" onclick="checkChecklist()"> <strong>流動路徑：</strong> 採長坡道讓時間與重力排氣。</label></li>
+                </ul>
+                <div id="checklist-msg" class="checklist-success">✅ 準備工作完成！可開始灌漿。</div>
+            </div>
+
+            <h3>1.2 現場圖鑑：認識 Epoxy 表面狀態</h3>
+            <p>透過觀察表面，判斷灌漿反應階段是否正常。</p>
+            <div class="interactive-area">
+                <div class="controls">
+                    <button onclick="showState('flow')" id="btn-flow" class="active-tab">A. 攪拌時態</button>
+                    <button onclick="showState('bubble')" id="btn-bubble">B. 流動期</button>
+                    <button onclick="showState('cured')" id="btn-cured">C. 排氣反應</button>
+                </div>
+                
+                <div class="surface-viewer" id="surface-display">
+                    </div>
+
+                <div id="state-text" class="state-description">
+                    <strong>🌊 狀態特徵：波浪推進 (Wave-like Motion)</strong><br>
+                    漿液呈現紅褐色黏稠狀，依靠重力像「岩漿」一樣捲動推進。此時切勿從對向灌注，以免夾氣。<br>
+                    <em>參照影像：</em>
+                </div>
+            </div>
+
+            <h3>1.3 灌漿排氣模擬</h3>
+            <div class="interactive-area">
+                <div class="controls">
+                    <button onclick="startSimulation('single')" style="background-color: var(--color-accent-green); color: white; border: none;">A. 單側灌注 (正確)</button>
+                    <button onclick="startSimulation('double')" style="background-color: var(--color-epoxy-red); color: white; border: none;">B. 雙側灌注 (錯誤)</button>
+                    <button onclick="resetSimulation()" style="background-color:#7f8c8d; color: white; border: none;">重置</button>
+                </div>
+                
+                <div id="simulation-container" class="grout-sim-container" style="max-width: 800px; margin: 20px auto;">
+                    <canvas id="grout-simulation" width="800" height="400"></canvas>
+                    
+                    <div class="legend-box inlet">灌漿口 (Inlet)</div>
+                    <div class="legend-box vent">排氣孔 (Vent)</div>
+                    
+                    <div class="layer-label baseplate">設備底座 (Baseplate)</div>
+                    <div class="layer-label concrete">混凝土基礎 (Concrete)</div>
+                </div>
+                
+                <div id="message" style="margin-top:10px; padding: 15px; font-weight:bold; color:#666; border: 2px solid #ddd; background-color: #ffffff; border-radius: 8px;">請選擇灌漿方式</div>
+            </div>
+            <p><strong>💡 檢查要點：</strong> 檢視孔灌至 7~8 分滿，確認呈現深色光澤且無氣泡冒出，在進行多次補灌至滿。</p>
+        </div>
+    </div>
+
+    <div class="section-tag tag-phy" style="background-color: var(--color-accent);">優先級：中 (決策工具)</div>
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <div class="accordion-title">二、故障診斷:Epoxy 能力邊界劃分</div>
+            <div class="icon">▼</div>
+        </div>
+        <div class="accordion-content">
+            <h3>2.1 故障邊界判斷與口訣</h3>
+            
+            <div style="background-color:#fff3cd; border-left:4px solid var(--color-accent-yellow); padding:15px; margin:15px 0; border-radius: 4px;">
+                <strong>現場口訣：</strong><br>
+                「鬆、軟、歪、空 皆可補，氣、流、電、內 不可救。」
+            </div>
+            
+            <table class="diag-table">
+                <thead>
+                    <tr>
+                        <th>現象 (口訣)</th>
+                        <th>本質原因 (結構/安裝)</th>
+                        <th>Epoxy 功效</th>
+                        <th>原理說明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row-ok">
+                        <td>鬆 (Looseness)</td>
+                        <td>地腳螺栓鬆動、連接剛性不足</td>
+                        <td><span class="icon-ok">✅ 有效</span></td>
+                        <td>固結固定，消除空隙，提升整體連接剛度。</td>
+                    </tr>
+                    <tr class="row-ok">
+                        <td>軟 (Soft Foot)</td>
+                        <td>基座剛性不足或墊片支撐不平</td>
+                        <td><span class="icon-ok">✅ 有效</span></td>
+                        <td>提供 100% 支撐面，提高系統剛度 $K$。</td>
+                    </tr>
+                    <tr class="row-ok">
+                        <td>空 (Void) / 歪</td>
+                        <td>灌漿層空鼓或設備底座不平整</td>
+                        <td><span class="icon-ok">✅ 有效</span></td>
+                        <td>完全填補空隙，恢復受力面均勻度。</td>
+                    </tr>
+                    <tr class="row-ng">
+                        <td>氣 (Cavitation) / 流 (Flow)</td>
+                        <td>流體氣蝕、流量脈動或液體設計問題</td>
+                        <td><span class="icon-ng">❌ 無效</span></td>
+                        <td>屬於流體動力學問題，與基座無關。</td>
+                    </tr>
+                    <tr class="row-ng">
+                        <td>電 (Electric) / 內 (Internal)</td>
+                        <td>電氣不平衡、轉子軸承磨損等</td>
+                        <td><span class="icon-ng">❌ 無效</span></td>
+                        <td>屬於設備內部機械/電氣故障，需維修設備本身。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="color:var(--color-primary); font-weight:bold; margin-top: 15px;">
+                總結：Epoxy 僅能修正結構（基礎/底座）相關的靜態問題，不能解決設備內部的動態、流體或電氣故障。
+            </p>
+        </div>
+    </div>
+
+    <div class="section-tag tag-phy" style="background-color: var(--color-accent);">優先級：中 (設計思維)</div>
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <div class="accordion-title">三、物理設計:質量、剛度、頻率模擬</div>
+            <div class="icon">▼</div>
+        </div>
+        <div class="accordion-content">
+            <h3>3.1 為什麼基座重量要是設備的 3~5 倍？</h3>
+            <p>目標：讓自然頻率 $f_n$ 遠離操作頻率 $f_{op}$ ($f_n \le 0.8 f_{op}$)。</p>
+            
+            <h3>3.2 互動模擬：剛度 K 與 質量 M 如何改變頻率</h3>
+            <p style="text-align:center; background:#f9f9f9; padding:10px; border-radius: 4px;">
+                $$f_n = \frac{1}{2\pi}\sqrt{\frac{k}{M}}$$
+            </p>
+            
+            <div class="interactive-area">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="control-group" style="width:45%;">
+                        <label>剛度 $k$ (Stiffness)</label>
+                        <input type="range" id="k-slider" min="10" max="200" value="50" oninput="updateFreq()">
+                    </div>
+                    <div class="control-group" style="width:45%;">
+                        <label>質量 $M$ (Mass)</label>
+                        <input type="range" id="m-slider" min="10" max="200" value="50" oninput="updateFreq()">
+                    </div>
+                </div>
+                <div class="spring-system">
+                    <div id="spring-vis" class="spring"></div>
+                    <div id="mass-vis" class="mass-block">Mass</div>
+                </div>
+                <p>自然頻率 $\omega_n = $ <span id="freq-val" style="color:var(--color-epoxy-red); font-weight:bold;">1.00</span> rad/s</p>
+            </div>
+
+            <details class="formula-dive">
+                <summary>🔍 點擊查看：剛度公式 $k = \frac{EA}{t}$ 推導</summary>
+                <div class="dive-content">
+                    <p>根據胡克定律 $\sigma = E\varepsilon$ 與彈簧定義 $F = k\delta$，可推導出 $k = \frac{EA}{t}$。</p>
+                    <p>物理意義：厚度 $t$ 越薄，剛度 $k$ 越高。</p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <div class="section-tag tag-design" style="background-color: #81ecec; color: #006266;">優先級：中 (進階理論)</div>
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <div class="accordion-title">四、能量傳遞：阻尼振動分析互動模擬器</div> <div class="icon">▼</div>
+        </div>
+        <div class="accordion-content">
+            <div class="vib-sim-module">
+                <h2>4.1振動傳遞率與 API 設計互動分析</h2>
+                <p style="text-align:center;">調整頻率以觀察 API 標準區間與傳遞率變化</p>
+
+                <div class="scenarios">
+                    <p>快速設定情境：</p>
+                    <button class="btn btn-epoxy" onclick="setScenario('epoxy')">情境 A：Epoxy 剛性基礎 (避振)</button>
+                    <button class="btn btn-iso" onclick="setScenario('isolation')">情境 B：彈簧隔振 (軟基礎)</button>
+                    <button class="btn btn-danger" onclick="setScenario('resonance')">危險：共振區</button>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label>操作頻率 $f_{op}$ (Hz)</label>
+                        <input type="range" id="fop" min="10" max="100" step="1" value="30">
+                        <span class="value-display"><span id="fopVal">30</span> Hz</span>
+                        <small>例如: 馬達轉速</small>
+                    </div>
+                    <div class="control-group">
+                        <label>固有頻率 $f_n$ (Hz)</label>
+                        <input type="range" id="fn" min="5" max="100" step="1" value="60">
+                        <span class="value-display"><span id="fnVal">60</span> Hz</span>
+                        <small>取決於: 質量 & 剛度(Epoxy)</small>
+                    </div>
+                    <div class="control-group">
+                        <label>阻尼比 $\zeta$ (Damping)</label>
+                        <input type="range" id="zeta" min="0.01" max="0.5" step="0.01" value="0.05">
+                        <span class="value-display"><span id="zetaVal">0.05</span></span>
+                        <small>Epoxy阻尼約 0.03-0.05</small>
+                    </div>
+                </div>
+
+                <div class="dashboard">
+                    <div class="stat-box">
+                        <div class="stat-title">頻率比 ($r = f_{op} / f_n$)</div>
+                        <div class="stat-value" id="rVal">0.50</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-title">傳遞率 ($T$)</div>
+                        <div class="stat-value" id="tVal">1.00</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-title">API 規範狀態</div>
+                        <div class="stat-value" id="apiStatus">符合 (剛性)</div>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-safe">
+                    系統目前處於剛性基礎區。振動力直接傳遞但不放大，適合 Epoxy 灌漿設計。
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="vibChart"></canvas>
+                </div>
+                <p class="formula">圖表 X 軸：頻率比 $r = f_{op} / f_n$ &nbsp; | &nbsp; Y 軸：傳遞率 $T$</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px; color:#999; font-size:0.8rem;">
+        TIM 12月工務部機械組工事處 | 互動式培訓教材
+    </div>
+
+</div>
+
+<script>
+    
+    // --- 零、SOP 互動邏輯：renderStep 函式 (已更新) ---
+function renderStep(step) {
+    const contentDiv = document.getElementById('step-content');
+    // 獲取所有步驟控制按鈕
+    const buttons = document.querySelectorAll('.step-controls button');
+
+    // 1. 步驟詳情資料定義
+    const stepDetails = {
+        '1': {
+            title: '步驟 1：基座準備與清潔',
+            purpose: '確保灌漿料與基座和底板有最佳的結合力。',
+            details: [
+                '鑿除或打毛表面，露出新鮮、粗糙的混凝土基層。',
+                '清除舊混凝土基座上的所有油脂、塵土、鬆動水泥塊。',
+                '在灌漿前24小時，對混凝土基座保持乾燥，不可有積水。',
+                '建議以機械方式用手持鼓風機吹乾。',
+                '為方便拆模，可塗兩層蠟膏或包覆聚乙烯薄膜。'
+            ]
+        },
+        '2': {
+            title: '步驟 2：漿料拌合',
+            purpose: '確保材料均勻混合，達到最佳流動性和強度。',
+            details: [
+                '依原廠比例混合主劑與硬化劑及骨材。', 
+                '使用低速電動攪拌器均勻攪拌主劑與硬化劑2分鐘。', 
+                '倒入攪拌器加入骨材均勻攪拌1分鐘。', 
+                '避免攪拌時間過長產生過多熱量或氣泡。'
+            ]
+        },
+        '3': {
+            title: '步驟 3：灌注作業',
+            purpose: '確保灌漿層完整無空隙 (VOID)，並將空氣完全排出。',
+            details: [
+                '採用單側低進高排方式灌注，切勿雙向灌注。', 
+                '灌注速度需維持穩定，避免過快或過慢。', 
+                '注意灌漿過程中排氣狀況與置平性現象。'
+            ]
+        },
+        '4': {
+            title: '步驟 4：養護處理',
+            purpose: '確保環氧樹脂達到設計強度和耐久性。',
+            details: [
+                '灌注後應靜置，不可搖晃或移動設備。', 
+                '在標準環境溫度 (25°C) 下，表面硬化約 6-8 小時，完全硬化需2天。', 
+                '拆模與開放重載時間需依產品規格和溫度條件調整。'
+            ]
+        }
+    };
+
+    // 2. 切換按鈕樣式
+    buttons.forEach(btn => btn.classList.remove('active'));
+    // 使用 data-step 找到當前步驟按鈕
+    const stepButton = document.querySelector(`.step-controls button[data-step="${step}"]`); 
+    if(stepButton) stepButton.classList.add('active');
+
+
+    // 3. 建立並插入內容 (使用新的 class)
+    const data = stepDetails[step];
+    
+    let htmlContent = `
+        <h4 style="display:none;">${data.title}</h4> <p class="step-purpose">目的：${data.purpose}</p>
+        <ul class="step-details">`;
+    data.details.forEach(detail => {
+        htmlContent += `<li>${detail}</li>`;
+    });
+    htmlContent += `</ul>`;
+
+    contentDiv.innerHTML = htmlContent;
+}
+window.renderStep = renderStep; // 確保函式在全域範圍內可用
+    
+    // 預設渲染步驟 1
+    renderStep('1'); 
+    
+    // --- 現場圖鑑：表面狀態邏輯 (showState 函式) ---
+    function showState(state) {
+        const display = document.getElementById('surface-display');
+        const text = document.getElementById('state-text');
+        const btns = document.querySelectorAll('.interactive-area .controls button');
+
+        // 影片檔案名稱與描述定義
+        const stateData = {
+            'flow': {
+                videoFile: 'videos/flow.mp4', 
+                desc: `<strong>✨ 狀態特徵：攪拌時態</strong><br>
+                       主劑與硬化劑混合後，加入骨材一開始表面水水的，當跟骨材混合後開始中間乾乾的周圍一樣水水的，當整個混合均勻時狀態會像影片狀況濕潤的感覺即完成攪拌。`
+            },
+            'bubble': {
+                videoFile: 'videos/bubble.mp4',
+                desc: `<strong>🌊 狀態特徵：流動期</strong><br>
+                       漿液呈現紅褐色黏稠狀，依靠自身重力像「岩漿」一樣捲動推進。此時**切勿**雙向灌注，以免夾氣。灌注速度需慢依本案設備機座大小上午僅能灌注一台下午一台。`
+            },
+            'cured': {
+                videoFile: 'videos/cured.mp4',
+                desc: `<strong>🌋 狀態特徵：排氣反應</strong><br>
+                       表面出現許多「火山口」狀的小氣孔，呈現類似橘皮的凹凸質感。這是內部空氣正在突破表面張力的正常現象，**應靜置等待**，待約莫完成排氣後再多次補灌至滿，避免空谷。`
+            }
+        };
+        const data = stateData[state];
+        
+        // 切換按鈕樣式
+        btns.forEach(b => b.classList.remove('active-tab'));
+        document.getElementById(`btn-${state}`).classList.add('active-tab');
+        
+        // 使用 <video> 標籤載入本機檔案
+        display.innerHTML = `
+            <video 
+                width="100%" 
+                height="100%" 
+                autoplay 
+                muted 
+                loop 
+                controls 
+                playsinline
+                style="position:absolute; top:0; left:0; object-fit: cover;"
+            >
+                <source src="${data.videoFile}" type="video/mp4">
+                您的瀏覽器不支援 HTML5 影片播放。
+            </video>
+        `;
+        
+        // 更新文字描述
+        text.innerHTML = data.desc;
+    }
+    window.showState = showState;
+
+    // --- 1.1 Checklist 邏輯 ---
+    function checkChecklist() {
+        const checkboxes = document.querySelectorAll('#prep-checklist input[type="checkbox"]');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        document.getElementById('checklist-msg').style.display = allChecked ? 'block' : 'none';
+    }
+
+    // --- 1.2 灌漿排氣模擬 (Canvas 繪圖邏輯) ---
+    const canvas = document.getElementById('grout-simulation');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 比例定義
+    const BASEPLATE_HEIGHT = 120;
+    const GAP_HEIGHT = 150;       
+    const CONCRETE_HEIGHT = H - BASEPLATE_HEIGHT - GAP_HEIGHT;
+    
+    const GROUT_Y_START = BASEPLATE_HEIGHT; 
+    const GROUT_Y_END = BASEPLATE_HEIGHT + GAP_HEIGHT; 
+    
+    // 擬真化顏色定義
+    const COLOR_BASEPLATE = '#5c636a';  
+    const COLOR_CONCRETE_LIGHT = '#c0c0c0'; 
+    const COLOR_CONCRETE_DARK = '#999999';  
+    const COLOR_AIR = '#f7f7f7';        
+    const COLOR_GROUT = '#8a3324';      
+    const COLOR_GROUT_SHINE = '#a55041';
+    const COLOR_TRAPPED_AIR = '#7dc1e4'; 
+    const COLOR_TRAPPED_AIR_STROKE = '#2a68b2';
+    const COLOR_INLET = '#28a745';      
+    const COLOR_VENT = '#ffc107';       
+
+    let animationFrameId = null;
+    let progress = 0;
+    let mode = null;
+    const messageDisplay = document.getElementById('message');
+
+    // 繪製靜態元素 (底座、混凝土、空間)
+    function drawStaticElements() {
+        ctx.clearRect(0, 0, W, H);
+
+        // 1. 設備底座 (Baseplate)
+        ctx.fillStyle = COLOR_BASEPLATE;
+        ctx.fillRect(0, 0, W, BASEPLATE_HEIGHT);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fillRect(0, 0, W, 10);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(0, BASEPLATE_HEIGHT - 5, W, 5);
+
+        // 2. 灌漿空間 (初始為空氣)
+        ctx.fillStyle = COLOR_AIR;
+        ctx.fillRect(0, GROUT_Y_START, W, GAP_HEIGHT);
+
+        // 3. 混凝土基礎 (Concrete)
+        ctx.fillStyle = COLOR_CONCRETE_LIGHT;
+        ctx.fillRect(0, GROUT_Y_END, W, CONCRETE_HEIGHT);
+        
+        // 混凝土紋理
+        for (let i = 0; i < 1500; i++) {
+            let x = Math.random() * W;
+            let y = GROUT_Y_END + Math.random() * CONCRETE_HEIGHT;
+            ctx.fillStyle = (Math.random() > 0.5) ? COLOR_CONCRETE_DARK : 'rgba(255,255,255,0.4)';
+            ctx.fillRect(x, y, 1, 1);
+        }
+
+        // 邊界線
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, GROUT_Y_START, W, GAP_HEIGHT);
+        
+        // 繪製漏斗形狀
+        drawFunnel(10, GROUT_Y_START, 'inlet');
+        drawFunnel(W - 30, GROUT_Y_START, 'vent');
+
+        // 繪製初始空氣標示
+        drawTrappedAir(W / 2, GROUT_Y_START + (GAP_HEIGHT / 2), 30);
+    }
+    
+    // 繪製漏斗
+    function drawFunnel(x, y, type) {
+        ctx.beginPath();
+        ctx.moveTo(x, y); 
+        ctx.lineTo(x + 20, y); 
+        ctx.lineTo(x + 15, y + 10);
+        ctx.lineTo(x + 5, y + 10);
+        ctx.closePath();
+        
+        ctx.fillStyle = (type === 'inlet') ? COLOR_INLET : COLOR_VENT;
+        ctx.fill();
+        
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+    
+    // 繪製被困住的氣泡
+    function drawTrappedAir(x, y, radius) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = COLOR_TRAPPED_AIR;
+        ctx.fill();
+        
+        // 氣泡光澤
+        const gradient = ctx.createRadialGradient(x + radius / 3, y - radius / 3, 1, x, y, radius);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        ctx.strokeStyle = COLOR_TRAPPED_AIR_STROKE;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Air', x, y);
+    }
+
+    // 繪製灌漿流動
+    function drawGrout() {
+        if (mode === 'single') {
+            const groutWidth = W * progress;
+            
+            ctx.fillStyle = COLOR_GROUT;
+            ctx.fillRect(0, GROUT_Y_START, groutWidth, GAP_HEIGHT);
+            
+            // 模擬液體前沿的反光
+            if (progress < 1.0) {
+                 ctx.fillStyle = COLOR_GROUT_SHINE;
+                 ctx.fillRect(groutWidth - 5, GROUT_Y_START, 5, GAP_HEIGHT);
+            }
+            
+            // 繪製氣泡
+            if (groutWidth < W / 2 + 30) {
+                drawTrappedAir(W / 2, GROUT_Y_START + (GAP_HEIGHT / 2), 30);
+            }
+
+        } else if (mode === 'double') {
+            const halfWidth = W / 2;
+            const flowWidth = halfWidth * progress;
+            const gapCenter = W / 2;
+            const airRadius = 30;
+
+            // 繪製左右兩側灌漿流
+            ctx.fillStyle = COLOR_GROUT;
+            ctx.fillRect(0, GROUT_Y_START, flowWidth, GAP_HEIGHT);
+            ctx.fillRect(W - flowWidth, GROUT_Y_START, flowWidth, GAP_HEIGHT);
+            
+            // 模擬液體前沿的反光
+            if (progress < 1.0 && progress >= 0.1) {
+                ctx.fillStyle = COLOR_GROUT_SHINE;
+                ctx.fillRect(flowWidth - 5, GROUT_Y_START, 5, GAP_HEIGHT);
+                ctx.fillRect(W - flowWidth, GROUT_Y_START, 5, GAP_HEIGHT);
+            }
+            
+            // 繪製被困住的氣泡
+            if (progress >= 0.5) {
+                const airX = gapCenter;
+                const airY = GROUT_Y_START + (GAP_HEIGHT / 2);
+                
+                drawTrappedAir(airX, airY, airRadius);
+                
+                // 讓氣泡周圍的灌漿層看起來像已經合攏
+                if (progress > 0.6) {
+                    ctx.fillStyle = COLOR_GROUT;
+                    ctx.fillRect(flowWidth, GROUT_Y_START, gapCenter - flowWidth - airRadius, GAP_HEIGHT);
+                    ctx.fillRect(gapCenter + airRadius, GROUT_Y_START, W - (gapCenter + airRadius) - flowWidth, GAP_HEIGHT);
+                }
+            } else {
+                drawTrappedAir(W / 2, GROUT_Y_START + (GAP_HEIGHT / 2), airRadius);
+            }
+        }
+        
+        // 重新繪製漏斗形狀，確保其在頂層
+        drawFunnel(10, GROUT_Y_START, 'inlet');
+        drawFunnel(W - 30, GROUT_Y_START, 'vent');
+    }
+
+    // 動畫循環
+    function animate() {
+        drawStaticElements();
+        drawGrout();
+        
+        if (progress < 1.0) {
+            progress += 0.005; 
+            if (progress > 1.0) progress = 1.0;
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            displayResult();
+        }
+    }
+
+    // 重置模擬
+    function resetSimulation() {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        progress = 0;
+        mode = null;
+        drawStaticElements();
+        messageDisplay.textContent = '請選擇灌漿方式';
+        messageDisplay.style.color = '#333';
+        messageDisplay.style.border = '2px solid #ddd';
+    }
+
+    // 啟動模擬
+    function startSimulation(newMode) {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        resetSimulation();
+        mode = newMode;
+        animate();
+    }
+    
+    // 顯示結果
+    function displayResult() {
+        if (mode === 'single') {
+            messageDisplay.textContent = '✅ 單側灌注成功！灌漿密實，空氣有效排出。';
+            messageDisplay.style.color = '#006400';
+            messageDisplay.style.border = '2px solid #28a745'; 
+        } else if (mode === 'double') {
+            messageDisplay.textContent = '❌ 雙側灌注錯誤！空氣在中間被灌漿料封閉捕捉，造成空隙。';
+            messageDisplay.style.color = '#a83c3c';
+            messageDisplay.style.border = '2px solid #cc4949'; 
+        }
+    }
+    
+    // --- 3.2 K&M 互動邏輯 ---
+    function updateFreq() {
+        const k = parseInt(document.getElementById('k-slider').value);
+        const m = parseInt(document.getElementById('m-slider').value);
+        // 自然頻率 (角頻率 rad/s)
+        const wn = Math.sqrt(k/m); 
+        document.getElementById('freq-val').innerText = wn.toFixed(2);
+        
+        // 更新動畫速度 (週期 = 2π/ωn)
+        const dur = (2 * Math.PI) / wn;
+        document.getElementById('spring-vis').style.animationDuration = dur + 's';
+        document.getElementById('mass-vis').style.animationDuration = dur + 's';
+    }
+
+
+    // --- 4.0 振動模擬器邏輯 ---
+    let vibChart;
+    
+    // 獲取元素 (如果存在)
+    const fopInput = document.getElementById('fop');
+    const fnInput = document.getElementById('fn');
+    const zetaInput = document.getElementById('zeta');
+    const fopValDisplay = document.getElementById('fopVal');
+    const fnValDisplay = document.getElementById('fnVal');
+    const zetaValDisplay = document.getElementById('zetaVal');
+    const rValDisplay = document.getElementById('rVal');
+    const tValDisplay = document.getElementById('tVal');
+    const apiStatusDisplay = document.getElementById('apiStatus');
+    const statusMsg = document.getElementById('statusMessage');
+
+    // 傳遞率公式
+    function calculateTransmissibility(r, zeta) {
+        const num = 1 + Math.pow(2 * zeta * r, 2);
+        const den = Math.pow(1 - Math.pow(r, 2), 2) + Math.pow(2 * zeta * r, 2);
+        return Math.sqrt(num / den);
+    }
+
+    // 更新模擬數據與圖表
+    function updateSimulation() {
+        if (!fopInput) return; 
+
+        const fop = parseFloat(fopInput.value);
+        const fn = parseFloat(fnInput.value);
+        const zeta = parseFloat(zetaInput.value);
+        const r = fop / fn;
+        const T = calculateTransmissibility(r, zeta);
+
+        // 更新數據顯示
+        fopValDisplay.textContent = fop;
+        fnValDisplay.textContent = fn;
+        zetaValDisplay.textContent = zeta.toFixed(2);
+        rValDisplay.textContent = r.toFixed(2);
+        tValDisplay.textContent = T.toFixed(2);
+
+        // 判斷區域與狀態
+        let zoneColor = '';
+        if (r <= 0.8) {
+            apiStatusDisplay.textContent = "符合 API (剛性基礎)";
+            apiStatusDisplay.style.color = "green";
+            statusMsg.className = "status-safe";
+            statusMsg.textContent = "✅ 剛性區域 (Rigid/Low-Tuned)：頻率比 < 0.8。這是 Epoxy 灌漿的目標區域。系統剛度高，位移小，振動不放大。";
+            zoneColor = 'green';
+        } else if (r >= 1.25) {
+            if (r > 1.414) {
+                apiStatusDisplay.textContent = "符合 API (有效隔振)";
+                apiStatusDisplay.style.color = "#0c5460";
+                statusMsg.className = "status-iso";
+                statusMsg.textContent = "🔵 隔振區域 (Isolation/High-Tuned)：頻率比 > 1.414。傳遞率 < 1，震動被有效吸收，適合彈簧/橡膠墊設計。";
+            } else {
+                apiStatusDisplay.textContent = "符合 API (避振但未完全隔振)";
+                apiStatusDisplay.style.color = "#17a2b8";
+                statusMsg.className = "status-iso";
+                statusMsg.textContent = "⚠️ 過渡區域：頻率比在 1.25 ~ 1.414 之間。符合 API 避開共振要求，但尚未達到理論隔振效果 (T < 1)。";
+            }
+            zoneColor = 'blue';
+        } else {
+            apiStatusDisplay.textContent = "❌ 違反 API (共振風險)";
+            apiStatusDisplay.style.color = "red";
+            statusMsg.className = "status-danger";
+            statusMsg.textContent = "🛑 共振區域 (Resonance)：頻率比在 0.8 ~ 1.25 之間。振動力被放大，極具破壞性。應變更設計！";
+            zoneColor = 'red';
+        }
+
+        // 重新繪製圖表曲線
+        const curveData = [];
+        for (let i = 0; i <= 300; i++) {
+            let x = i / 100; // r 從 0 到 3
+            curveData.push({x: x, y: calculateTransmissibility(x, zeta)});
+        }
+
+        if (vibChart) {
+            vibChart.data.datasets[0].data = curveData;
+            vibChart.data.datasets[1].data = [{x: r, y: T}];
+            vibChart.data.datasets[1].backgroundColor = zoneColor;
+            vibChart.data.datasets[1].borderColor = zoneColor;
+            vibChart.update();
+        }
+    }
+
+    // 快速情境設定
+    window.setScenario = function(type) {
+        if (!fopInput) return;
+        if (type === 'epoxy') {
+            fopInput.value = 30; 
+            fnInput.value = 60;  
+            zetaInput.value = 0.05;
+        } else if (type === 'isolation') {
+            fopInput.value = 60; 
+            fnInput.value = 20;  
+            zetaInput.value = 0.05;
+        } else if (type === 'resonance') {
+            fopInput.value = 30;
+            fnInput.value = 30;  
+            zetaInput.value = 0.05;
+        }
+        updateSimulation();
+    }
+
+    // 初始化 Chart.js 圖表
+    function initVibChart() {
+        if (!document.getElementById('vibChart')) return;
+        
+        const ctx = document.getElementById('vibChart').getContext('2d');
+        if (vibChart) vibChart.destroy(); // 避免重複初始化
+        
+        vibChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: '傳遞率曲線 (Transmissibility)',
+                        data: [],
+                        showLine: true,
+                        borderColor: '#888',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: '目前操作點',
+                        data: [],
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        backgroundColor: 'green'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: { display: true, text: '頻率比 r (f_op / f_n)' },
+                        min: 0,
+                        max: 3,
+                        grid: { color: (context) => {
+                            if (context.tick.value >= 0.79 && context.tick.value <= 0.81) return 'rgba(255, 0, 0, 0.5)'; 
+                            if (context.tick.value >= 1.24 && context.tick.value <= 1.26) return 'rgba(255, 0, 0, 0.5)'; 
+                            if (context.tick.value >= 1.41 && context.tick.value <= 1.42) return 'rgba(0, 0, 255, 0.5)'; 
+                            return 'rgba(0,0,0,0.05)';
+                        }}
+                    },
+                    y: {
+                        title: { display: true, text: '傳遞率 T' },
+                        min: 0,
+                        max: 5,
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `r: ${context.parsed.x.toFixed(2)}, T: ${context.parsed.y.toFixed(2)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 綁定事件監聽器
+        fopInput.addEventListener('input', updateSimulation);
+        fnInput.addEventListener('input', updateSimulation);
+        zetaInput.addEventListener('input', updateSimulation);
+    }
+    
+    // --- 手風琴區塊邏輯 ---
+    const accordions = document.querySelectorAll('.accordion-item');
+    accordions.forEach(item => {
+        item.querySelector('.accordion-header').addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            const isSectionFour = item.querySelector('.accordion-title').textContent.includes('四、進階設計：');
+            
+            // 關閉所有手風琴
+            accordions.forEach(other => { 
+                other.classList.remove('active'); 
+                other.querySelector('.accordion-content').style.maxHeight = null; 
+            });
+            
+            // 開啟被點擊的手風琴
+            if (!isActive) { 
+                item.classList.add('active'); 
+                const c = item.querySelector('.accordion-content'); 
+                // 增加高度以容納 Chart.js 圖表
+                c.style.maxHeight = c.scrollHeight + 500 + "px"; 
+                
+                // 如果是第四部分，初始化圖表
+                if (isSectionFour) {
+                    initVibChart();
+                    updateSimulation();
+                }
+            }
+        });
+    });
+
+    // --- 初始載入設定 ---
+    window.onload = function() {
+        showState('flow');
+        updateFreq();
+        resetSimulation(); 
+
+        // 確保初始活躍區塊的高度正確
+        const activeContents = document.querySelectorAll('.accordion-item.active .accordion-content');
+        activeContents.forEach(ac => {
+            ac.style.maxHeight = ac.scrollHeight + 500 + "px";
+        });
+        
+        // 如果第四部分預設為 active，則初始化
+        const sectionFour = document.querySelector('.accordion-item:nth-child(5)'); // Section 4 is the 5th accordion item (index 4)
+        if (sectionFour && sectionFour.classList.contains('active')) {
+             initVibChart();
+             updateSimulation();
+        }
+    };
+</script>
+</body>
+</html>
